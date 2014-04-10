@@ -8,7 +8,7 @@
 #if defined(GPS_SERIAL)
   #define RX_BUFFER_SIZE 256 // 256 RX buffer is needed for GPS communication (64 or 128 was too short)
 #else
-  #define RX_BUFFER_SIZE 64
+  #define RX_BUFFER_SIZE 256
 #endif
 #define TX_BUFFER_SIZE 128
 #define INBUF_SIZE 64
@@ -58,6 +58,16 @@ const uint32_t PROGMEM capability = 0+BIND_CAPABLE;
 #define MSP_PIDNAMES             117   //out message         the PID names
 #define MSP_WP                   118   //out message         get a WP, WP# is in the payload, returns (WP#, lat, lon, alt, flags) WP#0-home, WP#16-poshold
 #define MSP_BOXIDS               119   //out message         get the permanent IDs associated to BOXes
+
+#if defined(HEX_NANO)
+#define MSP_SET_RAW_RC_TINY      150   //in message          4 rc chan
+#define MSP_ARM                  151
+#define MSP_DISARM               152
+#define MSP_TRIM_UP              153
+#define MSP_TRIM_DOWN            154
+#define MSP_TRIM_LEFT            155
+#define MSP_TRIM_RIGHT           156
+#endif
 
 #define MSP_SET_RAW_RC           200   //in message          8 rc chan
 #define MSP_SET_RAW_GPS          201   //in message          fix, numsat, lat, lon, alt, speed
@@ -205,13 +215,122 @@ void serialCom() {
 }
 #ifndef SUPPRESS_ALL_SERIAL_MSP
 void evaluateCommand() {
+  #if defined(HEX_NANO)
+  unsigned char auxChannels;
+  unsigned char aux;
+  #endif
+  
   switch(cmdMSP[CURRENTPORT]) {
    case MSP_SET_RAW_RC:
      for(uint8_t i=0;i<8;i++) {
        rcData[i] = read16();
      }
+     
+     failsafeCnt = 0;
+     
      headSerialReply(0);
      break;
+ 
+   #if defined(HEX_NANO)
+   case MSP_SET_RAW_RC_TINY:
+     for(uint8_t i = 0;i < 4;i++) {
+       serialRcValue[i] = 1000 + read8() * 4;
+     }
+     
+     auxChannels = read8();
+     
+     aux = (auxChannels & 0xc0) >> 6;
+     
+     if(aux == 0){
+       serialRcValue[4] = 1000;
+     }
+     else if(aux == 1){
+       serialRcValue[4] = 1500;
+     }
+     else{
+       serialRcValue[4] = 2000;
+     }
+     
+     
+     aux = (auxChannels & 0x30) >> 4;
+     
+     if(aux == 0){
+       serialRcValue[5] = 1000;
+     }
+     else if(aux == 1){
+       serialRcValue[5] = 1500;
+     }
+     else{
+       serialRcValue[5] = 2000;
+     }
+     
+     
+     aux = (auxChannels & 0x0c) >> 2;
+     
+     if(aux == 0){
+       serialRcValue[6] = 1000;
+     }
+     else if(aux == 1){
+       serialRcValue[6] = 1500;
+     }
+     else{
+       serialRcValue[6] = 2000;
+     }
+     
+     aux = (auxChannels & 0x03);
+     
+     if(aux == 0){
+       serialRcValue[7] = 1000;
+     }
+     else if(aux == 1){
+       serialRcValue[7] = 1500;
+     }
+     else{
+       serialRcValue[7] = 2000;
+     }
+     
+     failsafeCnt = 0;
+     
+     return;
+     
+     //headSerialReply(0);
+     break;
+   case MSP_ARM:
+     go_arm();
+     break;
+   case MSP_DISARM:
+     go_disarm();
+     break;
+   case MSP_TRIM_UP:
+     conf.angleTrim[PITCH]+=4; 
+     writeParams(1);
+     #if defined(LED_RING)
+       blinkLedRing();
+     #endif
+     break;
+   case MSP_TRIM_DOWN:
+     conf.angleTrim[PITCH]-=4; 
+     writeParams(1);
+     #if defined(LED_RING)
+       blinkLedRing();
+     #endif
+   
+     break;
+   case MSP_TRIM_LEFT:
+     conf.angleTrim[ROLL]-=4; 
+     writeParams(1);
+     #if defined(LED_RING)
+       blinkLedRing();
+     #endif
+     break;
+   case MSP_TRIM_RIGHT:
+     conf.angleTrim[ROLL]+=4; 
+     writeParams(1);
+     #if defined(LED_RING)
+       blinkLedRing();
+     #endif
+     break;
+   #endif
    #if GPS
    case MSP_SET_RAW_GPS:
      f.GPS_FIX = read8();
