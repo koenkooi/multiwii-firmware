@@ -104,7 +104,7 @@ void LoadDefaults() {
   conf.P8[ROLL]     = 33;  conf.I8[ROLL]    = 30; conf.D8[ROLL]     = 23;
   conf.P8[PITCH]    = 33; conf.I8[PITCH]    = 30; conf.D8[PITCH]    = 23;
   conf.P8[YAW]      = 68;  conf.I8[YAW]     = 45;  conf.D8[YAW]     = 0;
-  conf.P8[PIDALT]   = 64; conf.I8[PIDALT]   = 25; conf.D8[PIDALT]   = 24;
+  conf.P8[PIDALT]   = 100; conf.I8[PIDALT]   = 25; conf.D8[PIDALT]   = 24;
   
   conf.P8[PIDPOS]  = POSHOLD_P * 100;     conf.I8[PIDPOS]    = POSHOLD_I * 100;       conf.D8[PIDPOS]    = 0;
   conf.P8[PIDPOSR] = POSHOLD_RATE_P * 10; conf.I8[PIDPOSR]   = POSHOLD_RATE_I * 100;  conf.D8[PIDPOSR]   = POSHOLD_RATE_D * 1000;
@@ -115,12 +115,17 @@ void LoadDefaults() {
   
   conf.P8[PIDVEL] = 0;      conf.I8[PIDVEL] = 0;    conf.D8[PIDVEL] = 0;
   
-  conf.rcRate8 = 90; conf.rcExpo8 = 65;
+  conf.rcRate8 = 90; conf.rcExpo8 = 0;
   conf.rollPitchRate = 0;
   conf.yawRate = 0;
   conf.dynThrPID = 0;
-  conf.thrMid8 = 50; conf.thrExpo8 = 0;
+  conf.thrMid8 = 50; conf.thrExpo8 = 50;
   for(uint8_t i=0;i<CHECKBOXITEMS;i++) {conf.activate[i] = 0;}
+  
+  conf.activate[BOXHORIZON]  = 1 << 0 | 1 << 1 | 1 << 2;
+  conf.activate[BOXHEADFREE] = 1 << 2;
+  conf.activate[BOXBARO]     = 1 << 5;
+  
   conf.angleTrim[0] = 0; conf.angleTrim[1] = 0;
   conf.powerTrigger1 = 0;
   #ifdef FLYING_WING

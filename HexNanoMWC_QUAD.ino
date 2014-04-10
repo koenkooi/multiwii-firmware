@@ -17,6 +17,10 @@ March  2013     V2.2
 #include <avr/pgmspace.h>
 #define  VERSION  220
 
+#if defined(HEX_NANO)
+volatile uint16_t serialRcValue[RC_CHANS] = {1502, 1502, 1502, 1502, 1502, 1502, 1502, 1502}; 
+#endif
+
 /*********** RC alias *****************/
 enum rc {
   ROLL,
@@ -801,7 +805,7 @@ void setup() {
 void go_arm() {
   if(calibratingG == 0 && f.ACC_CALIBRATED 
   #if defined(FAILSAFE)
-    && failsafeCnt < 2
+   // && failsafeCnt < 2
   #endif
     ) {
     if(!f.ARMED) { // arm now!
@@ -882,15 +886,29 @@ void loop () {
   #if defined(SPEKTRUM)
     if (spekFrameFlags == 0x01) readSpektrum();
   #endif
-  
   #if defined(OPENLRSv2MULTI) 
     Read_OpenLRS_RC();
   #endif 
+
+#if defined(HEX_NANO)
+  serialCom();
+#endif
 
   if (currentTime > rcTime ) { // 50Hz
     rcTime = currentTime + 20000;
     computeRC();
     // Failsafe routine - added by MIS
+#if defined(HEX_NANO)
+     rcData[0] = serialRcValue[0];
+     rcData[1] = serialRcValue[1];
+     rcData[2] = serialRcValue[2];
+     rcData[3] = serialRcValue[3];
+     rcData[4] = serialRcValue[4];
+     rcData[5] = serialRcValue[5];
+     rcData[6] = serialRcValue[6];
+     rcData[7] = serialRcValue[7];
+#endif
+    
     #if defined(FAILSAFE)
       if ( failsafeCnt > (5*FAILSAFE_DELAY) && f.ARMED) {                  // Stabilize, and set Throttle to specified level
         for(i=0; i<3; i++) rcData[i] = MIDRC;                               // after specified guard time after RC signal is lost (in 0.1sec)
@@ -1258,9 +1276,10 @@ void loop () {
       static uint8_t isAltHoldChanged = 0;
       #if defined(ALTHOLD_FAST_THROTTLE_CHANGE)
         if (abs(rcCommand[THROTTLE]-initialThrottleHold) > ALT_HOLD_THROTTLE_NEUTRAL_ZONE) {
-          errorAltitudeI = 0;
+         //errorAltitudeI = 0;
           isAltHoldChanged = 1;
-          rcCommand[THROTTLE] += (rcCommand[THROTTLE] > initialThrottleHold) ? -ALT_HOLD_THROTTLE_NEUTRAL_ZONE : ALT_HOLD_THROTTLE_NEUTRAL_ZONE;
+          rcCommand[THROTTLE] += (rcCommand[THROTTLE] > initialThrottleHold) ? -ALT_HOLD_THROTTLE_NEUTRAL_ZONE : ALT_HOLD_THROTTLE_NEUTRAL_ZONE;          
+         // initialThrottleHold += (rcCommand[THROTTLE] > initialThrottleHold) ? -ALT_HOLD_THROTTLE_NEUTRAL_ZONE : ALT_HOLD_THROTTLE_NEUTRAL_ZONE;; //++hex nano
         } else {
           if (isAltHoldChanged) {
             AltHold = EstAlt;
@@ -1277,7 +1296,7 @@ void loop () {
             AltHold += AltHoldCorr/500;
             AltHoldCorr %= 500;
           }
-          errorAltitudeI = 0;
+          //errorAltitudeI = 0;
           isAltHoldChanged = 1;
         } else if (isAltHoldChanged) {
           AltHold = EstAlt;
