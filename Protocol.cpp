@@ -242,6 +242,10 @@ void s_struct_w(uint8_t *cb,uint8_t siz) {
 
 #ifndef SUPPRESS_ALL_SERIAL_MSP
 void evaluateCommand() {
+  #if defined(HEX_NANO)
+    unsigned char auxChannels;
+    unsigned char aux;
+  #endif
   uint32_t tmp=0; 
 
   switch(cmdMSP[CURRENTPORT]) {
@@ -250,8 +254,97 @@ void evaluateCommand() {
      break;
    case MSP_SET_RAW_RC:
      s_struct_w((uint8_t*)&rcSerial,16);
+     failsafeCnt = 0;
      rcSerialCount = 50; // 1s transition 
      break;
+
+
+   #if defined(HEX_NANO)
+   case MSP_SET_RAW_RC_TINY:
+    for(uint8_t i = 0;i < 4;i++) {
+      serialRcValue[i] = 1000 + read8() * 4;
+    }
+    auxChannels = read8();
+    aux = (auxChannels & 0xc0) >> 6;
+    if(aux == 0){
+      serialRcValue[4] = 1000;
+    }
+    else if(aux == 1){
+      serialRcValue[4] = 1500;
+    }
+    else{
+      serialRcValue[4] = 2000;
+    }
+    aux = (auxChannels & 0x30) >> 4;    
+    if(aux == 0){
+      serialRcValue[5] = 1000;
+    }
+    else if(aux == 1){
+      serialRcValue[5] = 1500;
+    }
+    else{
+      serialRcValue[5] = 2000;
+    }
+    aux = (auxChannels & 0x0c) >> 2;
+    if(aux == 0){
+      serialRcValue[6] = 1000;
+    }
+    else if(aux == 1){
+      serialRcValue[6] = 1500;
+    }
+    else{
+      serialRcValue[6] = 2000;
+    }
+    aux = (auxChannels & 0x03);
+    if(aux == 0){
+      serialRcValue[7] = 1000;
+    }
+    else if(aux == 1){
+      serialRcValue[7] = 1500;
+    }
+    else{
+      serialRcValue[7] = 2000;
+    }
+    failsafeCnt = 0;
+    return;
+    //headSerialReply(0);
+    break;
+  case MSP_ARM:
+    go_arm();
+    break;
+  case MSP_DISARM:
+    go_disarm();
+    break;
+  case MSP_TRIM_UP:
+    conf.angleTrim[PITCH]+=4; 
+    writeParams(1);
+    #if defined(LED_RING)
+      blinkLedRing();
+    #endif
+    break;
+  case MSP_TRIM_DOWN:
+    conf.angleTrim[PITCH]-=4; 
+    writeParams(1);
+    #if defined(LED_RING)
+      blinkLedRing();
+    #endif
+    break;
+  case MSP_TRIM_LEFT:
+    conf.angleTrim[ROLL]-=4; 
+    writeParams(1);
+    #if defined(LED_RING)
+      blinkLedRing();
+    #endif
+    break;
+  case MSP_TRIM_RIGHT:
+    conf.angleTrim[ROLL]+=4; 
+    writeParams(1);
+    #if defined(LED_RING)
+      blinkLedRing();
+    #endif
+    break;
+  #endif
+
    #if GPS && !defined(I2C_GPS)
    case MSP_SET_RAW_GPS:
      struct {
