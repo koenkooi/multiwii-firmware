@@ -160,12 +160,17 @@ void LoadDefaults() {
 
     conf.pid[PIDVEL].P8 = 0;      conf.pid[PIDVEL].I8 = 0;    conf.pid[PIDVEL].D8 = 0;
 
-    conf.rcRate8 = 90; conf.rcExpo8 = 65;
+    conf.rcRate8 = 90; conf.rcExpo8 = 0;
     conf.rollPitchRate = 0;
     conf.yawRate = 0;
     conf.dynThrPID = 0;
-    conf.thrMid8 = 50; conf.thrExpo8 = 0;
+    conf.thrMid8 = 50; conf.thrExpo8 = 50;
     for(i=0;i<CHECKBOXITEMS;i++) {conf.activate[i] = 0;}
+
+	conf.activate[BOXHORIZON]  = 1 << 0 | 1 << 1 | 1 << 2;
+	conf.activate[BOXHEADFREE] = 1 << 2;
+	conf.activate[BOXBARO]     = 1 << 5;
+ 
     conf.angleTrim[0] = 0; conf.angleTrim[1] = 0;
     conf.powerTrigger1 = 0;
   #endif // SUPPRESS_DEFAULTS_FROM_GUI

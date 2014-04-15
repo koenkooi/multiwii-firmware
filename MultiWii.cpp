@@ -30,6 +30,10 @@ November  2013     V2.3
 
 /*********** RC alias *****************/
 
+#if defined(HEX_NANO)
+  volatile uint16_t serialRcValue[RC_CHANS] = {1502, 1502, 1502, 1502, 1502, 1502, 1502, 1502}; 
+#endif
+
 const char pidnames[] PROGMEM =
   "ROLL;"
   "PITCH;"
@@ -705,7 +709,7 @@ void go_arm() {
     && f.ACC_CALIBRATED 
   #endif
   #if defined(FAILSAFE)
-    && failsafeCnt < 2
+    //&& failsafeCnt < 2
   #endif
     ) {
     if(!f.ARMED && !f.BARO_MODE) { // arm now!
@@ -793,6 +797,10 @@ void loop () {
     Read_OpenLRS_RC();
   #endif 
 
+  #if defined(HEX_NANO)
+    serialCom();
+  #endif
+
   #if defined(SPEKTRUM) || defined(SBUS)
   if ((spekFrameDone == 0x01) || ((int16_t)(currentTime-rcTime) >0 )) { 
     spekFrameDone = 0x00;
@@ -802,6 +810,17 @@ void loop () {
     rcTime = currentTime + 20000;
     computeRC();
     // Failsafe routine - added by MIS
+    #if defined(HEX_NANO)
+      rcData[0] = serialRcValue[0];
+      rcData[1] = serialRcValue[1];
+      rcData[2] = serialRcValue[2];
+      rcData[3] = serialRcValue[3];
+      rcData[4] = serialRcValue[4];
+      rcData[5] = serialRcValue[5];
+      rcData[6] = serialRcValue[6];
+      rcData[7] = serialRcValue[7];
+    #endif
+    
     #if defined(FAILSAFE)
       if ( failsafeCnt > (5*FAILSAFE_DELAY) && f.ARMED) {                  // Stabilize, and set Throttle to specified level
         for(i=0; i<3; i++) rcData[i] = MIDRC;                               // after specified guard time after RC signal is lost (in 0.1sec)
