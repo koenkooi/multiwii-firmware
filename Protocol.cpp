@@ -310,10 +310,10 @@ void evaluateCommand() {
     //headSerialReply(0);
     break;
   case MSP_ARM:
-    go_arm();
+    f.OK_TO_ARM = 1; // allow arming again
     break;
   case MSP_DISARM:
-    go_disarm();
+    f.OK_TO_ARM = 0; // disallow arming
     break;
   case MSP_TRIM_UP:
     conf.angleTrim[PITCH]+=4; 
