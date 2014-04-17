@@ -40,7 +40,7 @@
     //#define Y4
     //#define Y6
     //#define HEX6
-    #define HEX_NANO
+    #define HEX6X
     //#define HEX6H  // New Model
     //#define OCTOX8
     //#define OCTOFLATP

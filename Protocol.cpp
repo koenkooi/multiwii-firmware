@@ -245,6 +245,7 @@ void evaluateCommand() {
   #if defined(HEX_NANO)
     unsigned char auxChannels;
     unsigned char aux;
+    volatile uint16_t serialRcValue[RC_CHANS] = {1502, 1502, 1502, 1502, 1502, 1502, 1502, 1502};
   #endif
   uint32_t tmp=0; 
 
