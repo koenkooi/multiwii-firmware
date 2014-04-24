@@ -1589,6 +1589,28 @@
   #undef INTERNAL_I2C_PULLUPS
 #endif
 
+#if defined(FLEXBOT_NANO)
+  #define MPU6050
+  #define BMP085
+  // the compass is too close to the DC lines that it's useless
+  //#define HMC5883
+  #define ACC_ORIENTATION(X, Y, Z)  {imu.accADC[ROLL]  = -X; imu.accADC[PITCH]  = -Y; imu.accADC[YAW]  =  Z;}
+  #define GYRO_ORIENTATION(X, Y, Z) {imu.gyroADC[ROLL] =  Y; imu.gyroADC[PITCH] = -X; imu.gyroADC[YAW] = -Z;}
+  #define MAG_ORIENTATION(X, Y, Z)  {imu.magADC[ROLL]  =  X; imu.magADC[PITCH]  =  -Y; imu.magADC[YAW]  = Z;}
+  #undef INTERNAL_I2C_PULLUPS
+  #define EXT_MOTOR_RANGE
+  #define A32U4ALLPINS 
+  // No ESC, simple MOSFETs
+  #define MINTHROTTLE 1000
+  #define MAXTHROTTLE 2000
+  // Fix MINCOMMAND now that MINTHROTTLE is 1000
+  #define MINCOMMAND -1056
+  // Everything is 400kHz safe
+  #define I2C_SPEED 400000L
+  // HM-11 Bluetooth module with iOS/Android apps using a special protocol
+  #define RC_TINY
+#endif
+
 /**************************************************************************************/
 /***************              Sensor Type definitions              ********************/
 /**************************************************************************************/
