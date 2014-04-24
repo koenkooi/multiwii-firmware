@@ -62,7 +62,7 @@ char digit1(uint16_t v) {return '0' + v - (v/10) * 10;}
 // ########################################
 // #  i2c OLED display funtion primitives #
 // ########################################
-#define OLED_address   0x3C     // OLED at address 0x3C in 7bit
+#define OLED_address   0x3D     // OLED at address 0x3C in 7bit
 char LINE_FILL_STRING[] = "                      "; // Used by clear_OLED() 128 bits / 6 bytes = 21 chars per row  
 unsigned char CHAR_FORMAT = 0;      // use to INVERSE characters
 // use INVERSE    CHAR_FORMAT = 0b01111111;
