@@ -30,6 +30,10 @@ November  2013     V2.3
 
 /*********** RC alias *****************/
 
+#if defined(RC_TINY)
+  volatile uint16_t serialRcValue[RC_CHANS] = {1502, 1502, 1502, 1502, 1502, 1502, 1502, 1502}; 
+#endif
+
 const char pidnames[] PROGMEM =
   "ROLL;"
   "PITCH;"
@@ -793,6 +797,10 @@ void loop () {
     Read_OpenLRS_RC();
   #endif 
 
+  #if defined(RC_TINY)
+    serialCom();
+  #endif
+
   #if defined(SPEKTRUM) || defined(SBUS)
   if ((spekFrameDone == 0x01) || ((int16_t)(currentTime-rcTime) >0 )) { 
     spekFrameDone = 0x00;
@@ -801,6 +809,18 @@ void loop () {
   #endif
     rcTime = currentTime + 20000;
     computeRC();
+
+    #if defined(RC_TINY)
+      rcData[0] = serialRcValue[0];
+      rcData[1] = serialRcValue[1];
+      rcData[2] = serialRcValue[2];
+      rcData[3] = serialRcValue[3];
+      rcData[4] = serialRcValue[4];
+      rcData[5] = serialRcValue[5];
+      rcData[6] = serialRcValue[6];
+      rcData[7] = serialRcValue[7];
+    #endif
+
     // Failsafe routine - added by MIS
     #if defined(FAILSAFE)
       if ( failsafeCnt > (5*FAILSAFE_DELAY) && f.ARMED) {                  // Stabilize, and set Throttle to specified level
