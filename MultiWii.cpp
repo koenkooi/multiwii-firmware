@@ -806,6 +806,10 @@ void loop () {
     Read_OpenLRS_RC();
   #endif 
 
+  #if defined(RC_TINY)
+    serialCom();
+  #endif
+
   #if defined(SPEKTRUM) || defined(SBUS)
   if ((spekFrameDone == 0x01) || ((int16_t)(currentTime-rcTime) >0 )) { 
     spekFrameDone = 0x00;
@@ -814,6 +818,11 @@ void loop () {
   #endif
     rcTime = currentTime + 20000;
     computeRC();
+
+    #if defined(RC_TINY)
+	// do we need to update something here?
+    #endif
+
     // Failsafe routine - added by MIS
     #if defined(FAILSAFE)
       if ( failsafeCnt > (5*FAILSAFE_DELAY) && f.ARMED) {                  // Stabilize, and set Throttle to specified level
