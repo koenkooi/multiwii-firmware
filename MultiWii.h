@@ -202,5 +202,7 @@ extern int16_t lookupThrottleRC[11];
 #endif
 
 void annexCode();
+void go_arm();
+void go_disarm();
 
 #endif /* MULTIWII_H_ */
