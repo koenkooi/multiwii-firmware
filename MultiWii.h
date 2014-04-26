@@ -43,6 +43,7 @@ extern int32_t  AltHold;
 extern int16_t  sonarAlt;
 extern int16_t  BaroPID;
 extern int16_t  errorAltitudeI;
+extern int16_t  initialThrottleHold;
 
 extern int16_t  i2c_errors_count;
 extern uint8_t alarmArray[16];

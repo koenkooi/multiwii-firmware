@@ -163,6 +163,7 @@ int32_t  AltHold; // in cm
 int16_t  sonarAlt;
 int16_t  BaroPID = 0;
 int16_t  errorAltitudeI = 0;
+int16_t  initialThrottleHold;
 
 // **************
 // gyro+acc IMU
@@ -777,7 +778,6 @@ void loop () {
   int16_t AngleRateTmp, RateError;
 #endif
   static uint16_t rcTime  = 0;
-  static int16_t initialThrottleHold;
   int16_t rc;
   int32_t prop = 0;
 
