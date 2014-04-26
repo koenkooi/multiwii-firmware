@@ -40,7 +40,7 @@
     //#define Y4
     //#define Y6
     //#define HEX6
-    //#define HEX6X
+    #define HEX6X
     //#define HEX6H  // New Model
     //#define OCTOX8
     //#define OCTOFLATP
@@ -60,11 +60,11 @@
     //#define MINTHROTTLE 1120 // for Super Simple ESCs 10A
     //#define MINTHROTTLE 1064 // special ESC (simonk)
     //#define MINTHROTTLE 1050 // for brushed ESCs like ladybird
-    #define MINTHROTTLE 1150 // (*) (**)
+    #define MINTHROTTLE 1000 // (*) (**)
 
   /****************************    Motor maxthrottle    *******************************/
     /* this is the maximum value for the ESCs at full power, this value can be increased up to 2000 */
-    #define MAXTHROTTLE 1850
+    #define MAXTHROTTLE 2000
 
   /****************************    Mincommand          *******************************/
     /* this is the value for the ESCs when they are not armed
@@ -72,8 +72,8 @@
     #define MINCOMMAND  1000
 
   /**********************************  I2C speed for old WMP config (useless config for other sensors)  *************/
-    #define I2C_SPEED 100000L     //100kHz normal mode, this value must be used for a genuine WMP
-    //#define I2C_SPEED 400000L   //400kHz fast mode, it works only with some WMP clones
+    //#define I2C_SPEED 100000L     //100kHz normal mode, this value must be used for a genuine WMP
+    #define I2C_SPEED 400000L   //400kHz fast mode, it works only with some WMP clones
 
   /***************************    Internal i2c Pullups   ********************************/
     /* enable internal I2C pull ups (in most cases it is better to use external pullups) */
@@ -150,6 +150,8 @@
       //#define RCNet_FC           // RCNet FC with MPU6050 and MS561101BA  http://www.rcnet.com
       //#define RCNet_FC_GPS       // RCNet FC with MPU6050 + MS561101BA + HMC5883L + UBLOX GPS http://www.rcnet.com
       //#define FLYDU_ULTRA        // MEGA+10DOF+MT3339 FC
+      
+      #define FLEXBOT_NANO     
       //#define DIYFLYING_MAGE_V1  // diyflying 10DOF mega board with MPU6050 + HMC5883L + BMP085 http://www.indoor-flying.hk
       //#define MultiWii_32U4_SE         // Hextronik MultiWii_32U4_SE
       //#define MultiWii_32U4_SE_no_baro // Hextronik MultiWii_32U4_SE without the MS561101BA to free flash-memory for other functions
@@ -404,7 +406,7 @@
 
     /*********************************    pin Layout     **********************************/
       /* activate this for a better pinlayout if all pins can be used => not possible on ProMicro */
-      //#define A32U4ALLPINS
+      #define A32U4ALLPINS
 
     /**********************************    PWM Setup     **********************************/
       /* activate all 6 hardware PWM outputs Motor 5 = D11 and 6 = D13. 
@@ -417,7 +419,7 @@
          Motor 1-4 = 10-bit hardware PWM
          Motor 5-8 = 10-bit Software PWM
          Servos    = 10-bit Software PWM */
-      //#define HWPWM6
+      #define HWPWM6
 
     /**********************************    Aux 2 Pin     **********************************/
       /* AUX2 pin on pin RXO */
@@ -501,7 +503,7 @@
          IMPORTANT! Change low pass filter setting changes PID behaviour, so retune your PID's after changing LPF.*/
       //#define MPU6050_LPF_256HZ     // This is the default setting, no need to uncomment, just for reference
       //#define MPU6050_LPF_188HZ
-      //#define MPU6050_LPF_98HZ
+      #define MPU6050_LPF_98HZ
       //#define MPU6050_LPF_42HZ
       //#define MPU6050_LPF_20HZ
       //#define MPU6050_LPF_10HZ
@@ -926,7 +928,7 @@
   /**************************************************************************************/
     /* motors will not spin when the throttle command is in low position
        this is an alternative method to stop immediately the motors */
-    //#define MOTOR_STOP
+    #define MOTOR_STOP
 
     /* some radios have not a neutral point centered on 1500. can be changed here */
     #define MIDRC 1500
