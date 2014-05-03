@@ -8,7 +8,7 @@
 void ACC_getADC ();
 #endif
 
-#if defined(L3G4200D) || defined(ITG3200) || defined(MPU6050) || defined(LSM330) || \
+#if defined(L3G4200D) || defined(L3GD20) || defined(ITG3200) || defined(MPU6050) || defined(LSM330) || \
     defined(MPU3050) || defined(WMP) || defined(NUNCHUCK)
 void Gyro_getADC ();
 #endif
@@ -89,6 +89,9 @@ uint8_t i2c_readNak();
   #define GYRO_SCALE (4 / 14.375 * PI / 180.0 / 1000000.0) //ITG3200   14.375 LSB = 1 deg/s
 #endif
 #if defined(L3G4200D)
+  #define GYRO_SCALE ((4.0f * PI * 70.0f)/(1000.0f * 180.0f * 1000000.0f)) // 70 milli deg/s /digit => 1 deg/s = 1000/70 LSB
+#endif
+#if defined(L3GD20)
   #define GYRO_SCALE ((4.0f * PI * 70.0f)/(1000.0f * 180.0f * 1000000.0f)) // 70 milli deg/s /digit => 1 deg/s = 1000/70 LSB
 #endif
 #if defined(MPU6050)

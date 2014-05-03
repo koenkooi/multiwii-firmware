@@ -1041,6 +1041,50 @@ void Gyro_getADC () {
 #endif
 
 // ************************************************************************************************************
+// I2C Gyroscope L3GD20 (16bit Output)
+// contribution from Kim HanCheol   e-mail : cona05@naver.com
+// I2C adress: 0xD6 (8bit)  I2C adress: 0x6B (7bit) (SAD connection to VDD)
+// I2C adress: 0xD4 (8bit)  I2C adress: 0x6A (7bit) (SAD connection to GND)
+// ************************************************************************************************************
+#if defined(L3GD20)
+#define L3GD20_ADDRESS 0xD6
+void Gyro_init() {
+  delay(100);
+// i2c_writeReg(L3GD20_ADDRESS+0 ,0x20 ,0x3F ); // CTRL_REG1   95Hz ODR, 25Hz filter, run!
+// i2c_writeReg(L3GD20_ADDRESS+0 ,0x20 ,0x4F ); // CTRL_REG1   190Hz ODR, 12.5Hz filter, run!
+// i2c_writeReg(L3GD20_ADDRESS+0 ,0x20 ,0x5F ); // CTRL_REG1   190Hz ODR, 25Hz filter, run!
+// i2c_writeReg(L3GD20_ADDRESS+0 ,0x20 ,0x6F ); // CTRL_REG1   190Hz ODR, 50Hz filter, run!
+// i2c_writeReg(L3GD20_ADDRESS+0 ,0x20 ,0x7F ); // CTRL_REG1   190Hz ODR, 70Hz filter, run!
+i2c_writeReg(L3GD20_ADDRESS+0 ,0x20 ,0x8F ); // CTRL_REG1   380Hz ODR, 20Hz filter, run!
+// i2c_writeReg(L3GD20_ADDRESS ,0x20 ,0xAF ); // CTRL_REG1   380Hz ODR, 50Hz filter, run!
+// i2c_writeReg(L3GD20_ADDRESS+0 ,0x20 ,0xBF ); // CTRL_REG1   380Hz ODR, 100Hz filter, run!
+// i2c_writeReg(L3GD20_ADDRESS+0 ,0x20 ,0xCF ); // CTRL_REG1   760Hz ODR, 30Hz filter, run!
+// i2c_writeReg(L3GD20_ADDRESS+0 ,0x20 ,0xEF ); // CTRL_REG1   760Hz ODR, 50Hz filter, run!
+// i2c_writeReg(L3GD20_ADDRESS+0 ,0x20 ,0xFF ); // CTRL_REG1   760Hz ODR, 100Hz filter, run!
+ 
+  delay(10);
+i2c_writeReg(L3GD20_ADDRESS+0 ,0x23 ,0xB0 ); // CTRL_REG4   Range setting  +,- 2000 dps
+// i2c_writeReg(L3GD20_ADDRESS+0 ,0x23 ,0xA0 ); // CTRL_REG4   output registers reding not updated,  Range setting  +,- 1000 dps
+// i2c_writeReg(L3GD20_ADDRESS+0 ,0x23 ,0x90 ); // CTRL_REG4  output registers not updated, Range setting  +,- 500 dps
+// i2c_writeReg(L3GD20_ADDRESS+0 ,0x23 ,0x80 ); // CTRL_REG4   output registers not updated, Range setting  +,- 250 dps
+ 
+  delay(10);
+  i2c_writeReg(L3GD20_ADDRESS+0 ,0x24 ,0x02 ); // CTRL_REG5   low pass filter enable
+}
+
+void Gyro_getADC () {
+  TWBR = ((16000000L / 400000L) - 16) / 2; // change the I2C clock rate to 400kHz
+  i2c_getSixRawADC(L3GD20_ADDRESS,0x80|0x28);
+
+  GYRO_ORIENTATION(  -((rawADC[3]<<8) | rawADC[2])/16  ,
+                     ((rawADC[1]<<8) | rawADC[0])/16  ,
+                     ((rawADC[5]<<8) | rawADC[4])/16  );
+  GYRO_Common();
+}
+#endif
+	
+
+// ************************************************************************************************************
 // I2C Gyroscope ITG3200 
 // ************************************************************************************************************
 // I2C adress: 0xD2 (8bit)   0x69 (7bit)

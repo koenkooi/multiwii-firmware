@@ -1604,7 +1604,7 @@
   #define MAG 0
 #endif
 
-#if defined(ITG3200) || defined(L3G4200D) || defined(MPU6050) || defined(LSM330) || defined(MPU3050) || defined(WMP)
+#if defined(ITG3200) || defined(L3G4200D) || defined(L3G20D) || defined(MPU6050) || defined(LSM330) || defined(MPU3050) || defined(WMP)
   #define GYRO 1
 #else
   #define GYRO 0
