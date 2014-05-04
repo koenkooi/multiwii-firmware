@@ -1611,6 +1611,12 @@
   #define I2C_SPEED 400000L
   // HM-11 Bluetooth module with iOS/Android apps using a special protocol
   #define RC_TINY
+  // 3.7v LiPo
+  #define VBATSCALE       195
+  #define VBATNOMINAL     37 // 3.6V full battery nominal voltage - only used for lcd.telemetry
+  #define VBATLEVEL_WARN1 33 // (*) (**) 3V
+  #define VBATLEVEL_WARN2  32 // (*) (**) 2.8V
+  #define VBATLEVEL_CRIT   30 // (*) (**) 2.6V - critical condition: if vbat ever goes below this value, permanent alarm is triggered
 #endif
 
 /**************************************************************************************/
