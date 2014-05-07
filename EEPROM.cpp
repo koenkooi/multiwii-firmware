@@ -171,7 +171,7 @@ void LoadDefaults() {
       conf.activate[BOXHEADFREE] = 1 << 2;
 #endif
 #if BARO
-      conf.activate[BOXBARO]     =  1 << 0 | 1 << 1 | 1 << 2;
+      conf.activate[BOXBARO]     =  1 << 2;
 #endif
     conf.angleTrim[0] = 0; conf.angleTrim[1] = 0;
     conf.powerTrigger1 = 0;
