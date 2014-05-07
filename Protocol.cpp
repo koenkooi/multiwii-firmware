@@ -242,26 +242,12 @@ void s_struct_w(uint8_t *cb,uint8_t siz) {
 
 #if defined(RC_TINY)
 void s_struct_tiny(uint16_t *cb,uint8_t siz) {
-  uint8_t i = 0;
-  uint8_t roll = 0;
-  uint8_t yaw =0;
-  uint8_t pitch = 0;
-  uint8_t throttle = 0;
-
   unsigned char auxChannels;
   unsigned char aux;
 
   headSerialReply(siz +1);
 
-  roll = read8();
-  yaw = read8();
-  pitch = read8();
-  throttle = read8();
-  
-  *cb++ = 1000 + roll * 4;
-  *cb++ = 1000 + yaw * 4;
-  *cb++ = 1000 + pitch * 4;
-  *cb++ = 1000 + throttle * 4;
+  while(siz--) *cb++ = 1000 + read8() * 4;
 
   auxChannels = read8();
 
