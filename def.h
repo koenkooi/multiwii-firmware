@@ -1605,6 +1605,8 @@
   #define MAXTHROTTLE 2000
   // Fix MINCOMMAND now that MINTHROTTLE is 1000
   #define MINCOMMAND -1056
+  // The default of +200 is waaaaay too much, the flexbot will take off like a rocket!
+  #define FAILSAFE_THROTTLE  (MINTHROTTLE + 50)
   // Everything is 400kHz safe
   #define I2C_SPEED 400000L
   // HM-11 Bluetooth module with iOS/Android apps using a special protocol
