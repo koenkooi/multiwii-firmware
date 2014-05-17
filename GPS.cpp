@@ -333,7 +333,7 @@ uint8_t GPS_NewData(void) {
       *varptr   = i2c_readNak();
     #endif	
     
-    if (_i2c_gps_status & I2C_GPS_STATUS_3DFIX) {                                     //Check is we have a good 3d fix (numsats>5)
+    if (_i2c_gps_status & I2C_GPS_STATUS_2DFIX) {                                     //Check is we have a good 3d fix (numsats>5)
       f.GPS_FIX = 1;
 
       if (_i2c_gps_status & I2C_GPS_STATUS_NEW_DATA) {                                //Check about new data
