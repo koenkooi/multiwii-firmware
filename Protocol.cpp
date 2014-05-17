@@ -306,7 +306,7 @@ void evaluateCommand() {
    #if defined(RC_TINY)
    case MSP_SET_RAW_RC_TINY:
      s_struct_tiny((uint16_t*)&rcSerial,4);
-     rcSerialCount = 50; // 1s transition
+     rcSerialCount = 100; // 2s transition
     break;
   case MSP_ARM:
 	go_arm();		// allow arming again
