@@ -422,6 +422,7 @@ void computeRC() {
     rc4ValuesIndex++;
     if (rc4ValuesIndex == AVERAGING_ARRAY_LENGTH-1) rc4ValuesIndex = 0;
     for (chan = 0; chan < RC_CHANS; chan++) {
+    #if !defined(RC_TINY)
       rcDataTmp = readRawRC(chan);
       #if defined(FAILSAFE)
         failsafeGoodCondition = rcDataTmp>FAILSAFE_DETECT_TRESHOLD || chan > 3 || !f.ARMED; // update controls channel only if pulse is above FAILSAFE_DETECT_TRESHOLD
@@ -438,6 +439,7 @@ void computeRC() {
           rcData4Values[chan][rc4ValuesIndex] = rcDataTmp;
         }
       #endif
+    #endif // !RC_TINY
       if (chan<8 && rcSerialCount > 0) { // rcData comes from MSP and overrides RX Data until rcSerialCount reaches 0
         rcSerialCount --;
         #if defined(FAILSAFE)
