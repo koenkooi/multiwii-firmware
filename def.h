@@ -1597,6 +1597,8 @@
   #define ACC_ORIENTATION(X, Y, Z)  {imu.accADC[ROLL]  = -X; imu.accADC[PITCH]  = -Y; imu.accADC[YAW]  =  Z;}
   #define GYRO_ORIENTATION(X, Y, Z) {imu.gyroADC[ROLL] =  Y; imu.gyroADC[PITCH] = -X; imu.gyroADC[YAW] = -Z;}
   #define MAG_ORIENTATION(X, Y, Z)  {imu.magADC[ROLL]  =  X; imu.magADC[PITCH]  =  -Y; imu.magADC[YAW]  = Z;}
+  // According to https://github.com/koenkooi/multiwii-firmware/issues/4#issuecomment-47650321 42Hz behave better than the default 98
+  #define MPU6050_LPF_42HZ
   #undef INTERNAL_I2C_PULLUPS
   #define EXT_MOTOR_RANGE
   #define A32U4ALLPINS 
