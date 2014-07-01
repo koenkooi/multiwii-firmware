@@ -245,8 +245,6 @@ void s_struct_tiny(uint16_t *cb,uint8_t siz) {
   unsigned char auxChannels;
   unsigned char aux;
 
-  headSerialReply(siz +1);
-
   while(siz--) *cb++ = 1000 + read8() * 4;
 
   auxChannels = read8();
@@ -707,6 +705,9 @@ void evaluateCommand() {
      headSerialError(0);
      break;
   }
+#if defined(RC_TINY)
+  if (cmdMSP[CURRENTPORT] != MSP_SET_RAW_RC_TINY)
+#endif
   tailSerialReply();
 }
 #endif // SUPPRESS_ALL_SERIAL_MSP
